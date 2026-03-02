@@ -26,8 +26,9 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
-    const validationMap = validateWeek(weekKey, slots || [])
-    const slotsWithValidation = (slots || []).map(slot => ({
+    const typedSlots = (slots || []) as StudioSlot[]
+    const validationMap = validateWeek(weekKey, typedSlots)
+    const slotsWithValidation = typedSlots.map((slot: StudioSlot) => ({
       ...slot,
       validation_status: validationMap.get(slot.id)?.status || 'ok',
       validation_reasons: validationMap.get(slot.id)?.reasons || [],
