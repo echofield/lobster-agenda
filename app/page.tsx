@@ -96,7 +96,7 @@ export default function HomePage() {
             Lobster Agenda
           </h1>
           <p style={{ fontFamily: FONT.label, fontSize: 10, color: T.secondary, marginTop: 2, letterSpacing: '0.1em' }}>
-            STUDIO PLANNING • ROMAN & LOBSTER
+            STUDIO PLANNING
           </p>
         </div>
 
@@ -206,11 +206,6 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Fairness HUD */}
-        <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginBottom: 20 }}>
-          <FairnessHUD />
-        </motion.div>
-
         {/* Board */}
         {schedule && <StudioBoard schedule={schedule} onAssign={handleAssign} loading={loading} />}
 
@@ -252,50 +247,9 @@ export default function HomePage() {
           </motion.div>
         )}
 
-        {/* Legend */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          style={{
-            marginTop: 24,
-            padding: 16,
-            background: T.surface,
-            border: `1px solid ${T.whisper}`,
-            borderRadius: 4,
-          }}
-        >
-          <div style={{ fontFamily: FONT.label, fontSize: 9, fontWeight: 600, letterSpacing: '0.15em', color: T.ghost, marginBottom: 12 }}>
-            RÈGLES DE PLANNING
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-            <div>
-              <div style={{ fontFamily: FONT.label, fontSize: 10, fontWeight: 500, color: T.gold, marginBottom: 4 }}>
-                Rotation Week-end Prime
-              </div>
-              <div style={{ fontFamily: FONT.body, fontSize: 11, color: T.secondary, lineHeight: 1.5 }}>
-                Semaine A: Roman (Sam SESSION + Dim NIGHT)<br />
-                Semaine B: Inversé
-              </div>
-            </div>
-            <div>
-              <div style={{ fontFamily: FONT.label, fontSize: 10, fontWeight: 500, color: T.gold, marginBottom: 4 }}>
-                Garanties MIX Matinales
-              </div>
-              <div style={{ fontFamily: FONT.body, fontSize: 11, color: T.secondary, lineHeight: 1.5 }}>
-                Roman: 3 garantis + 2 alternés (Sem A)<br />
-                Lobster: 2 garantis + 2 alternés (Sem B)
-              </div>
-            </div>
-            <div>
-              <div style={{ fontFamily: FONT.label, fontSize: 10, fontWeight: 500, color: T.alert, marginBottom: 4 }}>
-                Limite NIGHT Consécutives
-              </div>
-              <div style={{ fontFamily: FONT.body, fontSize: 11, color: T.secondary, lineHeight: 1.5 }}>
-                Maximum 2 NIGHT consécutives par personne
-              </div>
-            </div>
-          </div>
+        {/* Équité */}
+        <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginTop: 24 }}>
+          <FairnessHUD />
         </motion.div>
       </main>
     </div>
