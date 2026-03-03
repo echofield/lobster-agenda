@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { T, FONT, scaleIn } from '@/lib/design'
 import type { StudioSlot, StudioEntity, ValidationStatus } from '@/types/studio'
 import { ENTITY_INFO, SLOT_LABELS } from '@/types/studio'
@@ -20,6 +21,14 @@ interface SlotCardProps {
   isDragging?: boolean
   compact?: boolean
 }
+
+const ALL_PERSONS: { slug: PersonSlug; name: string; entity: EntitySlug }[] = [
+  { slug: 'roman', name: 'Roman', entity: 'rl' },
+  { slug: 'leonard', name: 'Léonard', entity: 'rl' },
+  { slug: 'martial', name: 'Martial', entity: 'lobster' },
+  { slug: 'alexandre', name: 'Alexandre', entity: 'lobster' },
+  { slug: 'hedi', name: 'Hedi', entity: 'lobster' },
+]
 
 const STATUS_COLORS: Record<ValidationStatus, string> = {
   ok: T.calm,
