@@ -9,6 +9,7 @@ import { useStudioSlots } from '@/hooks/use-studio-slots'
 import { StudioBoard } from '@/components/studio-board'
 import { WeekSelector } from '@/components/week-selector'
 import { FairnessHUD } from '@/components/fairness-hud'
+import type { PersonSlug } from '@/types/fairness'
 
 export default function HomePage() {
   const router = useRouter()
@@ -16,7 +17,7 @@ export default function HomePage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [user, setUser] = useState<{ email?: string } | null>(null)
 
-  const { schedule, weekKey, loading, error, setWeekKey, assignSlot, refetch } = useStudioSlots({ pollInterval: 30000 })
+  const { schedule, weekKey, loading, error, setWeekKey, assignSlot, assignPerson, refetch } = useStudioSlots({ pollInterval: 30000 })
 
   useEffect(() => {
     const supabase = createClient()
@@ -55,6 +56,15 @@ export default function HomePage() {
 
   const handleAssign = async (slotId: string, assignee: 'roman' | 'lobster' | null) => {
     const result = await assignSlot(slotId, assignee)
+    if (!result.success) {
+      setMessage({ type: 'error', text: result.error || 'Erreur' })
+      setTimeout(() => setMessage(null), 3000)
+    }
+    return result
+}
+
+  const handlePersonAssign = async (slotId: string, person: PersonSlug | null) => {
+    const result = await assignPerson(slotId, person)
     if (!result.success) {
       setMessage({ type: 'error', text: result.error || 'Erreur' })
       setTimeout(() => setMessage(null), 3000)
@@ -207,7 +217,7 @@ export default function HomePage() {
         )}
 
         {/* Board */}
-        {schedule && <StudioBoard schedule={schedule} onAssign={handleAssign} loading={loading} />}
+        {schedule && <StudioBoard schedule={schedule} onAssign={handleAssign} onPersonAssign={handlePersonAssign} loading={loading} />}
 
         {/* Empty state */}
         {!loading && !error && schedule && schedule.days.every(d => d.slots.length === 0) && (

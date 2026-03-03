@@ -5,17 +5,19 @@ import { motion } from 'framer-motion'
 import { T, FONT, fadeUp } from '@/lib/design'
 import type { WeekSchedule, StudioEntity, SlotType } from '@/types/studio'
 import { SLOT_LABELS, ENTITY_INFO } from '@/types/studio'
+import { PERSON_DISPLAY, type PersonSlug } from '@/types/fairness'
 import { SlotCard } from './slot-card'
 
 interface StudioBoardProps {
   schedule: WeekSchedule
   onAssign: (slotId: string, assignee: StudioEntity | null) => Promise<{ success: boolean; error?: string }>
+  onPersonAssign?: (slotId: string, person: PersonSlug | null) => Promise<{ success: boolean; error?: string }>
   loading?: boolean
 }
 
 const SLOT_ORDER: SlotType[] = ['mix', 'session', 'night']
 
-export function StudioBoard({ schedule, onAssign, loading }: StudioBoardProps) {
+export function StudioBoard({ schedule, onAssign, onPersonAssign, loading }: StudioBoardProps) {
   const [dragOverSlot, setDragOverSlot] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -163,7 +165,7 @@ export function StudioBoard({ schedule, onAssign, loading }: StudioBoardProps) {
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, slot.id, slot.assignee === 'roman' ? 'lobster' : 'roman')}
                 >
-                  <SlotCard slot={slot} onAssign={(assignee) => onAssign(slot.id, assignee)} compact />
+                  <SlotCard slot={slot} onAssign={(assignee) => onAssign(slot.id, assignee)} onPersonAssign={onPersonAssign ? (person) => onPersonAssign(slot.id, person) : undefined} compact />
                 </div>
               )
             })}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import type { StudioSlot, WeekSchedule } from '@/types/studio'
+import type { PersonSlug } from '@/types/fairness'
 import { buildWeekSchedule, getCurrentWeekKey } from '@/lib/week-utils'
 
 interface UseStudioSlotsOptions {
@@ -18,6 +19,7 @@ interface UseStudioSlotsReturn {
   refetch: () => Promise<void>
   setWeekKey: (key: string) => void
   assignSlot: (slotId: string, assignee: 'roman' | 'lobster' | null) => Promise<{ success: boolean; error?: string }>
+  assignPerson: (slotId: string, person: PersonSlug | null) => Promise<{ success: boolean; error?: string }>
 }
 
 export function useStudioSlots(options: UseStudioSlotsOptions = {}): UseStudioSlotsReturn {
@@ -68,7 +70,6 @@ export function useStudioSlots(options: UseStudioSlotsOptions = {}): UseStudioSl
         return { success: false, error: data.error || 'Failed to assign slot' }
       }
 
-      // Rebuild schedule after assignment
       setSlots(prev => {
         const updatedSlots = prev.map(s =>
           s.id === slotId
@@ -85,6 +86,31 @@ export function useStudioSlots(options: UseStudioSlotsOptions = {}): UseStudioSl
     }
   }, [weekKey])
 
+  // Person-level assignment (uses API person parameter)
+  const assignPerson = useCallback(async (
+    slotId: string,
+    person: PersonSlug | null,
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const res = await fetch('/api/slots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slot_id: slotId, person }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        return { success: false, error: data.error || 'Failed to assign slot' }
+      }
+
+      await fetchSlots()
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    }
+  }, [fetchSlots])
+
   useEffect(() => {
     fetchSlots()
 
@@ -94,5 +120,5 @@ export function useStudioSlots(options: UseStudioSlotsOptions = {}): UseStudioSl
     }
   }, [fetchSlots, options.pollInterval])
 
-  return { slots, schedule, weekKey, loading, error, refetch: fetchSlots, setWeekKey, assignSlot }
+  return { slots, schedule, weekKey, loading, error, refetch: fetchSlots, setWeekKey, assignSlot, assignPerson }
 }
