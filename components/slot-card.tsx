@@ -4,10 +4,19 @@ import { motion } from 'framer-motion'
 import { T, FONT, scaleIn } from '@/lib/design'
 import type { StudioSlot, StudioEntity, ValidationStatus } from '@/types/studio'
 import { ENTITY_INFO, SLOT_LABELS } from '@/types/studio'
+import { PERSON_DISPLAY, ENTITY_DISPLAY, type PersonSlug, type EntitySlug } from '@/types/fairness'
 
 interface SlotCardProps {
-  slot: StudioSlot
+  slot: StudioSlot & {
+    person_slug?: string | null
+    person_name?: string | null
+    entity_slug?: string | null
+    entity_name?: string | null
+    entity_color?: string | null
+    status?: string
+  }
   onAssign: (assignee: StudioEntity | null) => void
+  onPersonAssign?: (person: PersonSlug | null) => void
   isDragging?: boolean
   compact?: boolean
 }
@@ -18,23 +27,41 @@ const STATUS_COLORS: Record<ValidationStatus, string> = {
   block: T.alert,
 }
 
-export function SlotCard({ slot, onAssign, isDragging, compact }: SlotCardProps) {
+// Click cycle: null → roman → leonard → martial → alexandre → hedi → null
+const PERSON_CYCLE: (PersonSlug | null)[] = [null, 'roman', 'leonard', 'martial', 'alexandre', 'hedi']
+
+export function SlotCard({ slot, onAssign, onPersonAssign, isDragging, compact }: SlotCardProps) {
   const assigneeInfo = slot.assignee ? ENTITY_INFO[slot.assignee] : null
   const statusColor = STATUS_COLORS[slot.validation_status]
+
+  // Person-level info
+  const personSlug = slot.person_slug as PersonSlug | null
+  const personInfo = personSlug ? PERSON_DISPLAY[personSlug] : null
+  const displayColor = personInfo?.color || assigneeInfo?.color || T.ghost
+  const displayName = slot.person_name || assigneeInfo?.name || null
+  const entityBadge = slot.entity_slug
+    ? ENTITY_DISPLAY[slot.entity_slug as EntitySlug]?.name
+    : slot.assignee
+      ? (slot.assignee === 'roman' ? 'R.L' : 'LOBSTER')
+      : null
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('slot_id', slot.id)
     e.dataTransfer.setData('current_assignee', slot.assignee || '')
+    e.dataTransfer.setData('current_person', personSlug || '')
     e.dataTransfer.effectAllowed = 'move'
   }
 
   const handleClick = () => {
-    if (!slot.assignee) {
-      onAssign('roman')
-    } else if (slot.assignee === 'roman') {
-      onAssign('lobster')
+    if (onPersonAssign) {
+      const currentIdx = PERSON_CYCLE.indexOf(personSlug)
+      const nextIdx = (currentIdx + 1) % PERSON_CYCLE.length
+      onPersonAssign(PERSON_CYCLE[nextIdx])
     } else {
-      onAssign(null)
+      // Legacy entity cycling
+      if (!slot.assignee) onAssign('roman')
+      else if (slot.assignee === 'roman') onAssign('lobster')
+      else onAssign(null)
     }
   }
 
@@ -50,8 +77,8 @@ export function SlotCard({ slot, onAssign, isDragging, compact }: SlotCardProps)
         initial="hidden"
         animate="visible"
         style={{
-          background: slot.assignee ? assigneeInfo?.color + '22' : T.surface,
-          border: `1px solid ${slot.assignee ? assigneeInfo?.color + '55' : T.whisper}`,
+          background: displayName ? displayColor + '18' : T.surface,
+          border: `1px solid ${displayName ? displayColor + '44' : T.whisper}`,
           borderRadius: 3,
           padding: compact ? '6px 8px' : '8px 12px',
           userSelect: 'none',
@@ -62,6 +89,7 @@ export function SlotCard({ slot, onAssign, isDragging, compact }: SlotCardProps)
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
+        {/* Validation dot */}
         {slot.validation_status !== 'ok' && (
           <div
             style={{
@@ -77,74 +105,70 @@ export function SlotCard({ slot, onAssign, isDragging, compact }: SlotCardProps)
           />
         )}
 
-        <div
-          style={{
-            fontFamily: FONT.mono,
-            fontSize: compact ? 9 : 10,
-            color: T.ghost,
-            marginBottom: 4,
-          }}
-        >
+        {/* Lock indicator */}
+        {slot.status === 'locked' && (
+          <div style={{ position: 'absolute', top: 3, left: 3, fontSize: 7 }}>🔒</div>
+        )}
+
+        {/* Time */}
+        <div style={{
+          fontFamily: FONT.mono,
+          fontSize: compact ? 9 : 10,
+          color: T.ghost,
+          marginBottom: 4,
+        }}>
           {slot.start_time}–{slot.end_time}
         </div>
 
-        <div
-          style={{
-            fontFamily: FONT.label,
-            fontSize: compact ? 10 : 11,
-            fontWeight: 600,
-            letterSpacing: '0.1em',
-            color: T.secondary,
-            marginBottom: slot.assignee ? 4 : 0,
-          }}
-        >
+        {/* Slot type */}
+        <div style={{
+          fontFamily: FONT.label,
+          fontSize: compact ? 10 : 11,
+          fontWeight: 600,
+          letterSpacing: '0.1em',
+          color: T.secondary,
+          marginBottom: displayName ? 4 : 0,
+        }}>
           {SLOT_LABELS[slot.slot_type]}
         </div>
 
-        {slot.assignee && assigneeInfo && (
-          <div
-            style={{
+        {/* Person + entity */}
+        {displayName && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <div style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: 4,
               padding: '2px 6px',
-              background: assigneeInfo.color + '33',
-              border: `1px solid ${assigneeInfo.color}55`,
+              background: displayColor + '28',
+              border: `1px solid ${displayColor}44`,
               borderRadius: 2,
-            }}
-          >
-            <div
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                background: assigneeInfo.color,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: FONT.label,
-                fontSize: 9,
-                fontWeight: 500,
-                color: assigneeInfo.color,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              {assigneeInfo.name}
-            </span>
+              alignSelf: 'flex-start',
+            }}>
+              <div style={{
+                width: 6, height: 6, borderRadius: '50%', background: displayColor,
+              }} />
+              <span style={{
+                fontFamily: FONT.label, fontSize: 9, fontWeight: 500,
+                color: displayColor, letterSpacing: '0.05em',
+              }}>
+                {displayName}
+              </span>
+            </div>
+            {entityBadge && (
+              <span style={{
+                fontFamily: FONT.mono, fontSize: 7, color: T.ghost, letterSpacing: '0.05em',
+              }}>
+                {entityBadge}
+              </span>
+            )}
           </div>
         )}
 
-        {!slot.assignee && (
-          <div
-            style={{
-              fontFamily: FONT.label,
-              fontSize: 9,
-              color: T.ghost,
-              fontStyle: 'italic',
-            }}
-          >
+        {!displayName && (
+          <div style={{
+            fontFamily: FONT.label, fontSize: 9, color: T.ghost, fontStyle: 'italic',
+          }}>
             libre
           </div>
         )}

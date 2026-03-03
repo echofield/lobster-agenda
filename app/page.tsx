@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useStudioSlots } from '@/hooks/use-studio-slots'
 import { StudioBoard } from '@/components/studio-board'
 import { WeekSelector } from '@/components/week-selector'
+import { FairnessHUD } from '@/components/fairness-hud'
 
 export default function HomePage() {
   const router = useRouter()
@@ -204,6 +205,11 @@ export default function HomePage() {
             </button>
           </div>
         )}
+
+        {/* Fairness HUD */}
+        <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginBottom: 20 }}>
+          <FairnessHUD />
+        </motion.div>
 
         {/* Board */}
         {schedule && <StudioBoard schedule={schedule} onAssign={handleAssign} loading={loading} />}

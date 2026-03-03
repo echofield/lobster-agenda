@@ -12,7 +12,16 @@ export const T = {
   gold: '#A38767',
   alert: '#C45C3E',
   calm: '#4A7B6A',
+  lockout: '#8B2942',      // Rouge profond - session privée
+  openSession: '#2A6B4F',  // Vert - session ouverte (on peut hang)
+  money: '#D4AF37',        // Or vif - priorité argent
   grainOpacity: 0.03,
+} as const
+
+// Group colors
+export const GROUP_COLORS = {
+  lobster: '#4A7B6A',  // vert sauge
+  roman: '#A38767',    // doré
 } as const
 
 export const FONT = {
