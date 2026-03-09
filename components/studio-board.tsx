@@ -76,7 +76,7 @@ export function StudioBoard({ schedule, onAssign, onPersonAssign, loading }: Stu
         </div>
 
         <div style={{ display: 'flex', gap: 16 }}>
-          {(['roman', 'lobster'] as const).map(entity => {
+          {(['romann', 'lobster'] as const).map(entity => {
             const stats = schedule.stats[entity]
             const info = ENTITY_INFO[entity]
             return (
@@ -163,7 +163,7 @@ export function StudioBoard({ schedule, onAssign, onPersonAssign, loading }: Stu
                   }}
                   onDragOver={(e) => handleDragOver(e, slot.id)}
                   onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, slot.id, slot.assignee === 'roman' ? 'lobster' : 'roman')}
+                  onDrop={(e) => handleDrop(e, slot.id, slot.assignee === 'romann' ? 'lobster' : 'romann')}
                 >
                   <SlotCard slot={slot} onAssign={(assignee) => onAssign(slot.id, assignee)} onPersonAssign={onPersonAssign ? (person) => onPersonAssign(slot.id, person) : undefined} compact />
                 </div>
@@ -174,7 +174,7 @@ export function StudioBoard({ schedule, onAssign, onPersonAssign, loading }: Stu
       </div>
 
       <div style={{ display: 'flex', gap: 8, padding: 12, borderTop: `1px solid ${T.whisper}`, background: T.surface }}>
-        {(['roman', 'lobster'] as const).map(entity => {
+        {(['romann', 'lobster'] as const).map(entity => {
           const info = ENTITY_INFO[entity]
           return (
             <div

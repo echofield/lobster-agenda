@@ -88,7 +88,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           requesterPersonSlug = p.slug as PersonSlug
         }
       } else {
-        const entitySlug = swap.requester === 'roman' ? 'rl' : 'lobster'
+        const entitySlug = swap.requester === 'romann' ? 'rl' : 'lobster'
         const { data: e } = await supabase.from('lobster_entities').select('id').eq('slug', entitySlug).single()
         if (e) entityId = e.id
       }

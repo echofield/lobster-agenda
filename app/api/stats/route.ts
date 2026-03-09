@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       members: Record<string, { name: string; days: Set<string>; mix: number; session: number; night: number }>
     }> = {
       lobster: { name: 'LOBSTER STUDIO', slug: 'lobster', color: '#4A7B6A', total_days: new Set(), mix: 0, session: 0, night: 0, members: {} },
-      roman: { name: 'ROMAN & LÉONARD', slug: 'roman', color: '#A38767', total_days: new Set(), mix: 0, session: 0, night: 0, members: {} },
+      roman: { name: 'ROMAN & LÉONARD', slug: 'romann', color: '#A38767', total_days: new Set(), mix: 0, session: 0, night: 0, members: {} },
     }
 
     for (const slot of slots || []) {

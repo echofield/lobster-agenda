@@ -9,6 +9,7 @@ import { useStudioSlots } from '@/hooks/use-studio-slots'
 import { StudioBoard } from '@/components/studio-board'
 import { WeekSelector } from '@/components/week-selector'
 import { FairnessHUD } from '@/components/fairness-hud'
+import { SwapPanel } from '@/components/swap-panel'
 import type { PersonSlug } from '@/types/fairness'
 
 export default function HomePage() {
@@ -54,7 +55,7 @@ export default function HomePage() {
     router.refresh()
   }
 
-  const handleAssign = async (slotId: string, assignee: 'roman' | 'lobster' | null) => {
+  const handleAssign = async (slotId: string, assignee: 'romann' | 'lobster' | null) => {
     const result = await assignSlot(slotId, assignee)
     if (!result.success) {
       setMessage({ type: 'error', text: result.error || 'Erreur' })
@@ -182,6 +183,12 @@ export default function HomePage() {
         {/* Week selector */}
         <motion.div variants={fadeUp} initial="hidden" animate="visible" style={{ marginBottom: 20 }}>
           <WeekSelector selectedWeek={weekKey} onSelect={setWeekKey} weeksToShow={8} />
+        </motion.div>
+
+        {/* Swap Panel */}
+        <SwapPanel />
+
+        <motion.div variants={fadeUp} initial="hidden" animate="visible">
         </motion.div>
 
         {/* Error */}

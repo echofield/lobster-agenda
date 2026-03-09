@@ -23,8 +23,8 @@ interface SlotCardProps {
 }
 
 const ALL_PERSONS: { slug: PersonSlug; name: string; entity: EntitySlug }[] = [
-  { slug: 'roman', name: 'Roman', entity: 'rl' },
-  { slug: 'leonard', name: 'Léonard', entity: 'rl' },
+  { slug: 'romann', name: 'Romann', entity: 'rl' },
+  { slug: 'leonard', name: 'Leonard', entity: 'rl' },
   { slug: 'martial', name: 'Martial', entity: 'lobster' },
   { slug: 'alexandre', name: 'Alexandre', entity: 'lobster' },
   { slug: 'hedi', name: 'Hedi', entity: 'lobster' },
@@ -37,7 +37,7 @@ const STATUS_COLORS: Record<ValidationStatus, string> = {
 }
 
 // Click cycle: null → roman → leonard → martial → alexandre → hedi → null
-const PERSON_CYCLE: (PersonSlug | null)[] = [null, 'roman', 'leonard', 'martial', 'alexandre', 'hedi']
+const PERSON_CYCLE: (PersonSlug | null)[] = [null, 'romann', 'leonard', 'martial', 'alexandre', 'hedi']
 
 export function SlotCard({ slot, onAssign, onPersonAssign, isDragging, compact }: SlotCardProps) {
   const assigneeInfo = slot.assignee ? ENTITY_INFO[slot.assignee] : null
@@ -51,7 +51,7 @@ export function SlotCard({ slot, onAssign, onPersonAssign, isDragging, compact }
   const entityBadge = slot.entity_slug
     ? ENTITY_DISPLAY[slot.entity_slug as EntitySlug]?.name
     : slot.assignee
-      ? (slot.assignee === 'roman' ? 'R.L' : 'LOBSTER')
+      ? (slot.assignee === 'romann' ? 'R.L' : 'LOBSTER')
       : null
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -68,8 +68,8 @@ export function SlotCard({ slot, onAssign, onPersonAssign, isDragging, compact }
       onPersonAssign(PERSON_CYCLE[nextIdx])
     } else {
       // Legacy entity cycling
-      if (!slot.assignee) onAssign('roman')
-      else if (slot.assignee === 'roman') onAssign('lobster')
+      if (!slot.assignee) onAssign('romann')
+      else if (slot.assignee === 'romann') onAssign('lobster')
       else onAssign(null)
     }
   }

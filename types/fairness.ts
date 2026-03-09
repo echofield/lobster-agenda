@@ -8,7 +8,7 @@ export interface LobsterEntity {
   id: string
   name: string          // 'R.L' or 'LOBSTER'
   slug: string          // 'rl' or 'lobster'
-  display_name: string  // 'Roman & Léonard'
+  display_name: string  // 'Romann & Leonard'
   color: string
   target_share: number  // 0.50
 }
@@ -16,7 +16,7 @@ export interface LobsterEntity {
 export interface LobsterPerson {
   id: string
   name: string
-  slug: string          // 'roman', 'leonard', 'martial', 'alexandre', 'hedi'
+  slug: string          // 'romann', 'leonard', 'martial', 'alexandre', 'hedi'
   entity_id: string
   entity?: LobsterEntity
   color?: string
@@ -25,7 +25,7 @@ export interface LobsterPerson {
 }
 
 // Person slug type for strict typing
-export type PersonSlug = 'roman' | 'leonard' | 'martial' | 'alexandre' | 'hedi'
+export type PersonSlug = 'romann' | 'leonard' | 'martial' | 'alexandre' | 'hedi'
 export type EntitySlug = 'rl' | 'lobster'
 
 // ============================================================
@@ -33,7 +33,7 @@ export type EntitySlug = 'rl' | 'lobster'
 // ============================================================
 
 export const ENTITY_MAP: Record<PersonSlug, EntitySlug> = {
-  roman: 'rl',
+  romann: 'rl',
   leonard: 'rl',
   martial: 'lobster',
   alexandre: 'lobster',
@@ -41,13 +41,13 @@ export const ENTITY_MAP: Record<PersonSlug, EntitySlug> = {
 }
 
 export const ENTITY_DISPLAY: Record<EntitySlug, { name: string; displayName: string; color: string; persons: PersonSlug[] }> = {
-  rl: { name: 'R.L', displayName: 'Roman & Léonard', color: '#A38767', persons: ['roman', 'leonard'] },
+  rl: { name: 'R.L', displayName: 'Romann & Leonard', color: '#A38767', persons: ['romann', 'leonard'] },
   lobster: { name: 'LOBSTER', displayName: 'Lobster Studio', color: '#4A7B6A', persons: ['martial', 'alexandre', 'hedi'] },
 }
 
 export const PERSON_DISPLAY: Record<PersonSlug, { name: string; color: string; entity: EntitySlug }> = {
-  roman:     { name: 'Roman',     color: '#A38767', entity: 'rl' },
-  leonard:   { name: 'Léonard',   color: '#C4A882', entity: 'rl' },
+  romann:     { name: 'Romann',     color: '#A38767', entity: 'rl' },
+  leonard:   { name: 'Leonard',   color: '#C4A882', entity: 'rl' },
   martial:   { name: 'Martial',   color: '#4A7B6A', entity: 'lobster' },
   alexandre: { name: 'Alexandre', color: '#5C9B82', entity: 'lobster' },
   hedi:      { name: 'Hedi',      color: '#3A6B5A', entity: 'lobster' },
@@ -55,7 +55,7 @@ export const PERSON_DISPLAY: Record<PersonSlug, { name: string; color: string; e
 
 // Legacy compatibility: map old entity slugs to new
 export const LEGACY_ENTITY_MAP: Record<string, EntitySlug> = {
-  roman: 'rl',
+  romann: 'rl',
   lobster: 'lobster',
 }
 
@@ -238,7 +238,7 @@ export interface EnhancedSlot {
   end_time: string
   slot_date: string | null
   // Legacy
-  assignee: string | null       // 'roman' | 'lobster' (legacy enum)
+  assignee: string | null       // 'romann' | 'lobster' (legacy enum)
   // New person-level
   assigned_person_id: string | null
   assigned_entity_id: string | null

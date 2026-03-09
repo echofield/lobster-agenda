@@ -6,8 +6,8 @@ import { ENTITY_MAP, PERSON_DISPLAY, LEGACY_ENTITY_MAP } from '@/types/fairness'
 import type { StudioSlot, StudioEntity } from '@/types/studio'
 import type { PersonSlug, EntitySlug, EnhancedSlot } from '@/types/fairness'
 
-const VALID_ENTITIES = ['roman', 'lobster'] as const
-const VALID_PERSONS = ['roman', 'leonard', 'martial', 'alexandre', 'hedi'] as const
+const VALID_ENTITIES = ['romann', 'lobster'] as const
+const VALID_PERSONS = ['romann', 'leonard', 'martial', 'alexandre', 'hedi'] as const
 
 export async function GET(request: NextRequest) {
   const supabase = createServiceClient()
@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const slotId = body?.slot_id
-    const assignee = body?.assignee as StudioEntity | null | undefined // legacy: 'roman' | 'lobster'
-    const person = body?.person as PersonSlug | null | undefined       // new: 'roman' | 'leonard' | etc.
+    const assignee = body?.assignee as StudioEntity | null | undefined // legacy: 'romann' | 'lobster'
+    const person = body?.person as PersonSlug | null | undefined       // new: 'romann' | 'leonard' | etc.
 
     if (!slotId) {
       return NextResponse.json({ error: 'slot_id required' }, { status: 400 })
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       }
       personSlug = person
       entitySlug = ENTITY_MAP[person]
-      legacyAssignee = entitySlug === 'rl' ? 'roman' : 'lobster'
+      legacyAssignee = entitySlug === 'rl' ? 'romann' : 'lobster'
     } else if (assignee !== undefined) {
       // Legacy entity-level assignment (backwards compatible)
       if (assignee !== null && !VALID_ENTITIES.includes(assignee as any)) {
@@ -351,7 +351,7 @@ export async function PUT(request: NextRequest) {
       if (personData) {
         personId = personData.id
         entityId = personData.entity_id
-        legacyAssignee = ENTITY_MAP[person] === 'rl' ? 'roman' : 'lobster'
+        legacyAssignee = ENTITY_MAP[person] === 'rl' ? 'romann' : 'lobster'
       }
     }
 

@@ -443,7 +443,7 @@ function resolveEntitySlug(slot: EnhancedSlot): EntitySlug | null {
   if (slot.entity_slug) return slot.entity_slug as EntitySlug
   if (slot.person_slug) return ENTITY_MAP[slot.person_slug as PersonSlug] || null
   // Legacy fallback
-  if (slot.assignee === 'roman') return 'rl'
+  if (slot.assignee === 'romann') return 'rl'
   if (slot.assignee === 'lobster') return 'lobster'
   return null
 }
@@ -574,7 +574,7 @@ export function evaluateSwapFairness(
   const newEntitySlug = ENTITY_MAP[newPersonSlug]
   const simulatedSlots = currentSlots.map(s =>
     s.id === swapSlotId
-      ? { ...s, person_slug: newPersonSlug, entity_slug: newEntitySlug, assignee: newEntitySlug === 'rl' ? 'roman' : 'lobster' }
+      ? { ...s, person_slug: newPersonSlug, entity_slug: newEntitySlug, assignee: newEntitySlug === 'rl' ? 'romann' : 'lobster' }
       : s
   )
 

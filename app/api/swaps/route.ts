@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import type { StudioEntity } from '@/types/studio'
 
-const VALID_ENTITIES = ['roman', 'lobster'] as const
+const VALID_ENTITIES = ['romann', 'lobster'] as const
 
 export async function GET(request: NextRequest) {
   const supabase = createServiceClient()

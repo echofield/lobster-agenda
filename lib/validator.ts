@@ -39,8 +39,8 @@ export function getExpectedPrimeAssignments(weekType: 'A' | 'B'): Record<string,
   // Encoding: "5_session" = Saturday SESSION, "6_night" = Sunday NIGHT, etc.
   if (weekType === 'A') {
     return {
-      '5_session': 'roman',   // Sat SESSION -> Roman
-      '6_night': 'roman',     // Sun NIGHT -> Roman
+      '5_session': 'romann',   // Sat SESSION -> Roman
+      '6_night': 'romann',     // Sun NIGHT -> Roman
       '5_night': 'lobster',   // Sat NIGHT -> Lobster
       '6_session': 'lobster', // Sun SESSION -> Lobster
     }
@@ -48,8 +48,8 @@ export function getExpectedPrimeAssignments(weekType: 'A' | 'B'): Record<string,
     return {
       '5_session': 'lobster', // Week B: inverse
       '6_night': 'lobster',
-      '5_night': 'roman',
-      '6_session': 'roman',
+      '5_night': 'romann',
+      '6_session': 'romann',
     }
   }
 }
@@ -60,7 +60,7 @@ export function getExpectedPrimeAssignments(weekType: 'A' | 'B'): Record<string,
 export function countMixMornings(slots: StudioSlot[]): { roman: number; lobster: number } {
   const mixSlots = slots.filter(s => s.slot_type === 'mix')
   return {
-    roman: mixSlots.filter(s => s.assignee === 'roman').length,
+    roman: mixSlots.filter(s => s.assignee === 'romann').length,
     lobster: mixSlots.filter(s => s.assignee === 'lobster').length,
   }
 }
@@ -204,10 +204,10 @@ export function validateMove(
     // Guaranteed minimums: Roman 3, Lobster 2
     // Total MIX slots per week = 7 (one per day)
     // Alternating = 2 (Week A: Roman, Week B: Lobster)
-    const alternatingOwner: StudioEntity = weekType === 'A' ? 'roman' : 'lobster'
+    const alternatingOwner: StudioEntity = weekType === 'A' ? 'romann' : 'lobster'
 
     // Calculate effective guarantees with alternating
-    const romanMin = 3 + (alternatingOwner === 'roman' ? 2 : 0)
+    const romanMin = 3 + (alternatingOwner === 'romann' ? 2 : 0)
     const lobsterMin = 2 + (alternatingOwner === 'lobster' ? 2 : 0)
 
     // Count all assigned MIX slots
@@ -215,7 +215,7 @@ export function validateMove(
     const totalMixSlots = simulatedSlots.filter(s => s.slot_type === 'mix').length
 
     // Check if assignment would break guarantees
-    if (newAssignee === 'roman' && mixCounts.lobster < lobsterMin) {
+    if (newAssignee === 'romann' && mixCounts.lobster < lobsterMin) {
       const lobsterNeeds = lobsterMin - mixCounts.lobster
       const remainingSlots = totalMixSlots - totalAssigned
       if (remainingSlots < lobsterNeeds) {

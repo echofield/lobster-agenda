@@ -18,7 +18,7 @@ interface UseStudioSlotsReturn {
   error: string | null
   refetch: () => Promise<void>
   setWeekKey: (key: string) => void
-  assignSlot: (slotId: string, assignee: 'roman' | 'lobster' | null) => Promise<{ success: boolean; error?: string }>
+  assignSlot: (slotId: string, assignee: 'romann' | 'lobster' | null) => Promise<{ success: boolean; error?: string }>
   assignPerson: (slotId: string, person: PersonSlug | null) => Promise<{ success: boolean; error?: string }>
 }
 
@@ -55,7 +55,7 @@ export function useStudioSlots(options: UseStudioSlotsOptions = {}): UseStudioSl
 
   const assignSlot = useCallback(async (
     slotId: string,
-    assignee: 'roman' | 'lobster' | null,
+    assignee: 'romann' | 'lobster' | null,
   ): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await fetch('/api/slots', {

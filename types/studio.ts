@@ -1,6 +1,6 @@
 // STUDIO MODULE TYPES
 
-export type GroupSlug = 'roman' | 'lobster'
+export type GroupSlug = 'romann' | 'lobster'
 export type StudioEntity = GroupSlug
 export type SlotType = 'mix' | 'session' | 'night'
 export type SwapStatus = 'pending' | 'accepted' | 'declined'
